@@ -1,7 +1,7 @@
 ---
 title: "ARA 669 - Assignment 1"
-author: "Your name here"
-date: "today's date here"
+author: "Abdoulie B. Jallow "
+date: "2026-08-30"
 output: html_document
 ---
 
@@ -15,11 +15,14 @@ Please submit this assignment via GitHub by Sept. 3 at 5 pm.
 
 Use the code chunk below to load the tidyverse package \[0.5 pt\].
 
-```{r setup}
+```{r load_packages}
 #| message: false
 #| error: false
 
+
+
 # Paste your code in here!
+library(tidyverse)
 
 ```
 
@@ -32,10 +35,19 @@ Several well-behaved datasets are preloaded into R and are frequently used to de
 #| error: false
 
 # Paste your code in here!
-
+data()
+data("iris")
+head(iris)
+glimpse(iris)
+str(iris)
+summary(iris)
+colnames(iris)
+attach(iris)
 ```
 
 Describe the context of the dataset and the structure of the data themselves \[1 pt\].
+
+The iris dataset contains 150 observations of flower measurements of 3 species: Setosa,Versicolor  and Virginica. The measures are sepal length, width and petal length and width. The iris dataset contains 4 variables which are the column names are Sepal.Length, Sepal.Width  Petal.Length Petal.Width.  
 
 ## Plotting
 
@@ -46,22 +58,40 @@ Explore the data visually using ggplot2 \[1 pt\].
 #| error: false
 
 # Paste your code in here!
+ggplot(iris,aes(Petal.Length, Petal.Width, color=Species))+
+   geom_point()
+
+ggplot(iris,aes(Sepal.Length, Sepal.Width, color=Species))+
+  geom_point()
+
 
 ```
 
 Describe your approach. What choices did you make in deciding which variables to use, plot types, etc., and why? [1 pt].
 
+For this visualization, I created 2 scatter plots to explore how the Petal.Length and Petal width and between Sepal.length and Petal.Width are are related. Both of these plots are based on the numerical measurement to explore relationship visually for each flower category. The different colors shows different species relationship.
+
+
+
 ## Read & reflect
 
 Read the perspectives article “Should we still teach or learn coding? A postgraduate student perspective on the use of large language models for coding in ecology & evolution” (Campbell et al. 2024). What part(s) of this article resonated with you, and why [1.5 pts]? 
+
+The claim that resonated with me was the authors augment that LLMs should be supplementary rather than substitute coding education. While I used copilot for Rstudio, Quarto and GitHup setups to run smoothly, I still need to understand fundamental concepts and underlying concepts to effectively evaluate LLMs suggestions and model outputs.This support the authors claims that coding education is still necessary and LLMs should be supplementary to the foundational knowledge skills. 
 
 ## AI statement
 
 Describe your use of AI in this assignment, including:
 
-1.  What tool or service did you use?
+1.  **What tool or service did you use?**
 
-2.  What was the specific purpose or use?
+This particular assignment I used copilot
 
-3.  How did this use enhance your understanding of the topic/code?
+2.  **What was the specific purpose or use?**
+
+This Sunday, I used Copilot to complete the setup my GitHup and Studio cloning and. I also used it this to debug my coding errors and editing my explanations
+
+3.  **How did this use enhance your understanding of the topic/code?**
+
+It did help me complete my GitHup cloning in Rstudio and step my set un the Quarto code explanations . I found as immediate tool always to use in a state of error or debugging codes.
 

@@ -1,0 +1,77 @@
+---
+title: "ARA 669 - Project Proposal"
+author: "Abdoulie B. Jallow"
+date: "today"
+format:
+  html:
+    theme: flatly  # Other theme names include cosmo, lux, or sandstone
+    toc: true # Adds an automatic Table of Contents
+    toc-depth: 3 # Navigation lists headings down to sub-subheadings
+    toc-location: left # Places the navigation menu on the left side
+    number-sections: true # Automatically adds numbers (1., 1.1) to your headings
+    code-fold: true # Collapses code into neat, clickable boxes
+    code-summary: "Show Code" # Sets the text displayed on the clickable code box
+    linkcolor: "#18bc9c" # Changes hyperlinks to a clean coastal teal color
+    code-block-bg: "#f8f9fa" # Gives code boxes a soft off-white background
+    code-block-border-left: "#2c3e50" # Adds a dark slate accent line to code boxes
+execute:
+  warning: false # Hides messy package warning alerts in your final report
+  message: false # Hides general package loading text in your final report
+---
+
+## Introduction
+
+Marine fisheries in Northwest Africa support food security, nutrition, and employment for many countries along the coast . Much of the region's marine productivity is associated with the Canary Current Large Marine Ecosystem (CCLME), an eastern boundary upwelling systemthat is among the most productive marine ecosystem globally. Demersal fisheries constitute an important component of marine ecosystems and fisheries production in Northwest Africa. Several studies have reported declines in the abundance and biomass of demersal resources throughout the region. The reported declines is highlighting concerns regarding the sustainability of commercially important fish stocks. The regional scientific surveys supported the Food and Agricultureal Organisation (FAO) have been the the main input for regional stock assessment but the population dynamics of the resources remained very limited within the region.
+The second chapter of my thesis will focus on Northwest African demersal fisheries utlizing the long term scientific surveys. I will be looking at abundance, population size structure, and spatiotemporal distributions of key demersal species within the region. Northwest Africa is constitute from morocco to Senegal according the FAO stock assessment Working Group. Institute of Marine science (IMR ),Bergen Norway having been conducting the regional fisheries surveys on behalf FAO since 1975. The transboundary demersal survey for Northwest Africa covers Morocco, Westerns Sahara, Mauritania, Senegal, The Gambia, Gunea and Gunea Bissau. The number of exclusive economic zones(EEZ) to be included will depend on the FAO authorization which is base on FAO fellowship student agreement. The demersal surveys are usually bottom trawls from 20m to 800/1000m while the pelagic surveys in the same region is acoustic base but there trawls that do not use acoustic to target fish schools which I am hoping to include as blind trawls from the pelagic. These data collected includes : Biomass(weight), counts of species, length, sex, maturity level while the environmental variables such as depth, dissolved oxygen, latitude, longitude, time, temperature, and chlorophyll. My second chapter my thesis is title "The Abundance, Population Size Structure, and Spatiotemporal Distribution of Key Demersal Resources in Northwest Africa".
+I want to test How have abundance, population size structure, and spatial distribution of key demersal species in Northwest Africa changed over time, and are these patterns associated with environmental conditions?
+
+
+## Goals and Objectives 
+
+The aim of the study is to improve the understanding population dynamics of key demersal species in NorthWest Africa towards sustainable fisheries management through the following objectives
+
+1.  Develop standardize indices of relative abundance (CPUE) of key demersal species using the demersal bottom trawls and blind trawls from the pelagic surveys
+2.  Evaluate temporal changes in relative abundance for key demersal species
+3.  Evaluate population size structure of the key demersal species over the years
+4.  Examine the spatiotemporal distribution of the species in relation to selected environmental parameters
+
+
+
+### Hypotheses
+
+- $H_{01}$: The abundance of key demersal species does not vary significantly through time.
+
+- $H_{02}$: The mean body size of key demersal species does not change significantly through time.
+
+- $H_{03}$: Environmental variables have no significant influence on the abundance of key demersal species.
+
+- $H_{04}$: The spatial distribution of key demersal species does not vary significantly through time.
+
+
+## Expected Outcomes 
+
+The finding of this study will improve knowledge on the population dynamics of the key species within the region .The analytical outcomes will strengthen the scientific bases for ecological understanding, regional stock assessment, monitoring and management of these valuable fisheries in the region.
+
+## Materials and Methods
+
+### Data Source
+
+The EAF-Nansen have been surveying fisheries resources in Africa since 1975. However,during the my last interview with them, they said maybe the specification of gears might have change, the survey series might start from 1981 to 2024. The dataset is not on annual bases but it could be use shed light on the resources.
+
+### study area 
+This map in figure 1 shows the demersal sampling area in Northwest Africa covering the continental shelf of Morocco to Guinea Bissau.
+
+![Map of the study area in Northwest Africa. The right panel shows the region from Morocco to Mauritania, while the left panel shows Mauritania, Senegal, Guinea, and Guinea-Bissau (Source: EAF-Nansen Sailing Order 2024).](sample_map.png){#fig-sampling-map}
+
+
+### Analytical Approach 
+
+The demersal survey data covers alot sampling locations with potential zero values depending on the depth,region and seasons. To achieve the objectives of this study, a combination of approaches would be used as follows:
+
+1.  Generalize linear models for non linear for catch rates, Biomass, count per unit time or area.
+2.  Delta-GLM for the CPUE standardization where the approach might be divided to binomial (Catch and non catch rates ) and log normal for positive catch rates.
+3.  Linear mixed effect (LMM) or Time-Series Regression with Autoregressive (AR) correlation structures.
+4.  LBB or LBSPR will be used for the population size structure over time .
+5.  Spatial Generalized Additive Models (GAMs) with two-dimensional smoothing splines, or Vector Auto-regressive Spatio-Temporal (VAST) models for the spatio-temporal distribution in relation to environmental variables
+
+During my last interview with The EAF-Nansen team and The FAO scientific officers, they recommended sdmTMB and VAST models which at this stage I do not know what they meant but I was told these models are highly effective for for fsiheries survey.

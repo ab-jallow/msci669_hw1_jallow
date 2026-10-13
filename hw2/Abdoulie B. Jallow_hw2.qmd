@@ -35,7 +35,7 @@ snailDensity: Snail Density
 notes: any notes about the observation
 
 *Please submit this assignment via GitHub by 24 September.*  
-
+7.5/9 - please let me know if you have any questions. 
 
 ## Getting started
 
@@ -48,7 +48,7 @@ notes: any notes about the observation
 # Paste your code in here!
 # required packages
 library(tidyverse)
-library(readr) 
+library(readr) # note that this is technically part of the tidyverse so you don't have to library() it separately
 
 # Data importation and data structure 
 
@@ -76,6 +76,7 @@ theme_set(
 
 **Explore the data visually using ggplot2. \[0.5 pt\]**
 I Choose the liveStems, burrows and deadstems as my predictors for snail density, before I went ahead with my models I plotted histograms of these 3 variables to see how distributed are they before going ahead with my models. I use used ggpairs on the 3 variables to see how well the correlated the outcome/response(SnailDensity) but most of them were poorly correlated with the response variable. Burrows and deadstemps shows a negative co-relationship while livestems show very minimal corelatinship (0.035)
+
 
 ```{r plotting}
 #| message: false
@@ -187,6 +188,7 @@ plot1 + plot2 + plot3
 
 **Describe your approach. What choices did you make in deciding which variables to use, plot types, etc., and why? \[1 pt\]**
 I explored my chosen variables which are the livestems, deadStems and burrows,  using histograms. Base on the histogram of plot 1, plot2 and plot3 I would say they are normally distributed. I choosed these variables as my predictors due to the fact that I think there will have an effect on the snail density and might help to answer the question about snail variability. 
+In the future, please provide more details about the thought process behind why you made your decisions, not just what those decisions were. 
 
 ## Research question
 
@@ -204,6 +206,7 @@ I will evaluate three separate simple linear regression models to determine whic
 
 ### Model 3: Burrows Hypothesis
 **The number of burrows has no effect on snail density**.
+These are all null hypotheses (i.e., hypotheses of no effect), but typically you'd want to either include null and alternative hypotheses or only include hypotheses of an effect. 
 
 ## Analysis
 
@@ -219,6 +222,7 @@ m2 <-lm(snailDensity~liveStems+ burrows,data=data)
 m3 <- lm(snailDensity~liveStems+ burrows+deadStems ,data=data)
 m4<- lm(snailDensity~liveStems+ burrows*deadStems ,data=data) # assessing interaction term
 m5<- lm(snailDensity~liveStems+ burrows*liveStems,data=data)
+# these models do not reflect the hypotheses described above. 
 
 summary(m1)
 summary(m2)
@@ -295,7 +299,7 @@ p2 <- ggplot(data, aes(x = liveStems, y = snailDensity)) +
 
 # Display them side-by-side using patchwork syntax
 p1 + p2
-
+Technically, using method = "lm" works because you have a linear regression and just a single variable. It's fine for data exploration but should not be used for predictions. 
 
 #data %>% select(snailDensity, burrows, liveStems) %>% pivot_longer(cols = c(burrows, liveStems), 
                #names_to = "Predictor", 

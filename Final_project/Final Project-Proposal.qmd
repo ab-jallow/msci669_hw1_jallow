@@ -1,0 +1,51 @@
+---
+title: "Semester _Project"
+author: "Abdoulie B. Jallow"
+format: html
+editor: visual
+toc:  true 
+---
+
+## Introduction
+
+This project will utilize the data collected through Northeast Area Monitoring and Assessment Program (NEAMAP) Nearshore Bottom Trawl Survey. The NEAMAP survey is a long term-term fisheries independent program designed to collected information on abundance and distribution of species caught during the survey insitu with wide range of environmental variables. The NEAMAP monitoring survey started about 2007 to date which is conducted during spring and fall for every year.
+
+The data set contains many variables but this project will focus on species CPUE, abundance and distribution as outcome(s) . Other importance variables includes temperature, year, season, depth, towdistance , DO,lon, lat. Some of the variables varies alot
+
+This data set present great opportunity to assess two commercially and ecologically important species of Butterfish (*Peprilus triacanthus*) and Scup (*Stenotomus chrysops*). The Butterfish is a small pelagic fish found in the Mid Atlantic Coastal waters of the USA while scup is a highly valuable commercial and ecological species that is widely distributed in many habitats zones. Therefore, the overall goal of this study is to evaluate the spatial and temporal variability in CPUE-based abundance and biomass of butterfish (*Peprilus triacanthus*) and scup (*Stenotomus chrysops*) using data from NEAMAP. This will study quantify temporal trends in abundance and biomass, assess the influence of environmental and habitat factors on species distribution, and identify conditions associated with suitable habitat for both species and potentially explore wider spatiotemporal scale.
+
+## Objectives
+
+To achieve this goal, the following objectives will be addressed:
+
+1.  Quantify temporal and seasonal variation in standardized abundance and biomass indices of scup and butterfish using NEAMAP survey data.
+2.  Evaluate the influence of environmental and habitat variables (e.g., depth, temperature, salinity, dissolved oxygen) on the abundance and biomass of scup and butterfish.
+3.  Characterize the spatial and temporal distribution patterns of scup and butterfish and identify areas of suitable habitat
+
+## Hypothesis
+
+H1: Standardized abundance and biomass of Scup and Butterfish differ among seasons.
+
+H2: Standardized abundance and biomass of Scup and Butterfish differ among years.
+
+H3: Environmental variables, particularly temperature and depth, significantly influence the abundance and distribution of Scup and Butterfish.
+
+H4: Scup and butterfish exhibit distinct spatial distribution patterns and habitat associations across the NEAMAP survey region.
+
+## Statistical Approach
+
+Preliminary exploration indicates that both CPUE-abundance and CPUE-biomass are highly right-skewed, with approximately 22.5% zero observations. There for i wiill explore Tweedie GLM, Delta-GLM, Delta-GLMM , Delta GAM and use model diagnostics and AIC to selected the most supported model. Habitat suitability for these two species I will explore Generalized Additive Models (GAMs) or Delta-GAM to capture nonlinerity and for the spatiotemporal if there is time I will like use sdmTMB/ VAST .
+
+## Research Questions
+
+The selected model(s) will be used to address the following research questions:
+
+1.  How have standardized abundance and biomass indices of Scup (*Stenotomus chrysops*) and Butterfish (*Peprilus triacanthus*) varied across years and seasons from 2007-2024?
+
+2.  Which environmental variables best explain the abundance and distribution of Scup and Butterfish
+
+3.  How have the spatial distributions of Scup and Butterfish changed through time?
+
+## Library Loading
+
+## Data importation

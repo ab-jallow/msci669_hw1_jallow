@@ -34,7 +34,7 @@ H4: Scup and butterfish exhibit distinct spatial distribution patterns and habit
 
 ## Statistical Approach
 
-Preliminary exploration indicates that both CPUE-abundance and CPUE-biomass are highly right-skewed, with approximately 22.5% zero observations. There for i wiill explore Tweedie GLM, Delta-GLM, Delta-GLMM , Delta GAM and use model diagnostics and AIC to selected the most supported model. Habitat suitability for these two species I will explore Generalized Additive Models (GAMs) or Delta-GAM to capture nonlinerity and for the spatiotemporal if there is time I will like use sdmTMB/ VAST .
+Preliminary exploration indicates that both CPUE-abundance and CPUE-biomass are highly right-skewed, with approximately 22.5% zero observations. There for I wiill explore Tweedie GLM, Delta-GLM, Delta-GLMM , Delta GAM and use model diagnostics and AIC to selected the most supported model. Habitat suitability for these two species I will explore Generalized Additive Models (GAMs) or Delta-GAM to capture nonlinerity and for the spatiotemporal if there is time I will like use sdmTMB/ VAST .
 
 ## Research Questions
 

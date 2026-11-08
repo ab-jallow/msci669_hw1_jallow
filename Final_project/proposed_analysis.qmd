@@ -1,0 +1,98 @@
+---
+title: "ARA 669 - Exploratory data analysis and proposed analytical approach"
+author: "Your name here"
+date: "today's date here"
+output: html_document
+---
+
+## Final Project
+
+Each student will complete an independent project using a dataset from their own research whenever possible. Students who do not have an appropriate dataset will be provided with one.
+
+The project is intended to mirror the statistical component of a scientific research study and will require students to integrate concepts learned throughout the course. Project components include: 
+
+- formulation of a research question, objective, and/or testable hypotheses;
+- description of the study design and data with justification of design adequacy;
+- exploratory data analysis;
+- selection and justification of an appropriate modeling approach;
+- model fitting, comparison, selection, and validation;
+- interpretation of results in the context of the research question;
+- preparation of publication-quality figures and tables;
+- a written report in the style of a short scientific paper (approximately 4-6 pages); and
+- a 3-minute lightening talk summarizing the study, analytical approach, results, and conclusions.
+
+Projects will be evaluated on the quality of the scientific question, appropriateness of the statistical methodology, rigor of the analysis, interpretation of results, clarity of written and oral communication, and reproducibility of the analytical workflow.
+
+To support you on this analytical journey, this project has been divided into four steps, which will all contribute to your final project grade (worth 50% of your total grade). 
+
+1. Project proposal, including research question and description of dataset
+2. Exploratory data analysis and proposed analytical approach
+3. Preliminary model fits and diagnostics
+4. Final paper and presentation
+
+## Exploratory data analysis and proposed analytical approach
+
+The goal of this component of the project is begin exploring your dataset and developing a plan for the analysis. 
+
+Please submit this assignment via GitHub by **12 October at 11:59pm**, including the raw data, .qmd, and .html files. Be sure that the entire file runs without errors before submitting. You can create a new folder in your homework repository or create a new repository specific to the final project, whichever you prefer. This exploratory analysis, preliminary model fits (part 3), and code used for the final paper and presentation will all be submitted via GitHub. 
+
+## Data exploration
+
+**Use the code chunk below to load packages and the data.**
+
+```{r setup}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+
+library(tidyverse)
+library(readr)
+library(glmmTMB)
+library(GGally)
+library(performance)
+library(mgcv)
+
+```
+
+**Based on your research questions, objectives, and/or testable hypotheses, develop data visualizations using ggplot2. Consider visualizations that show relationships, the distribution of the underlying data, etc. If you need inspiration, check out the [R Graph Gallery](https://r-graph-gallery.com/). For each visualization, describe your approach: what choices did you make in deciding which variables to use, plot types, etc., and why? \[2.5 pts\]**
+
+
+```{r fig1}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+# dataset
+dat <- readRDS("butterfish_scup_analysis_ready.rds")
+str(dat)
+
+```
+
+
+```{r fig2}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+
+
+```
+
+*Add additional code chunks as needed so each graph shows up after the code used to generate it.*
+
+## Proposed analytical approach
+
+**Considering the study design and data, and your research questions, objectives, and/or testable hypotheses, describe your proposed analytical approach. Include your response and predictor variables, type of analysis (linear regression, generalized linear regression, gam, etc.), model selection criteria, etc. Provide sufficient detail to evaluate your proposed approach in the context of your data and questions of interest. If you have questions or uncertain about anything, highlight that here as well. \[2.5 pts\]**
+
+
+
+## AI statement
+
+**If you used AI for this assignment, please describe your use, including:**
+
+**1.  What tool or service did you use?**
+
+**2.  What was the specific purpose or use?**
+
+**3.  How did this use enhance your understanding of the topic/code?**

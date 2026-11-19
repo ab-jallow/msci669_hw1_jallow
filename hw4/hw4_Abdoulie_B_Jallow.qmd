@@ -1,0 +1,353 @@
+---
+title: "ARA 669 - Assignment 4"
+author: "Abdoulie B. Jallow"
+date: "17-11-2026"
+format:
+  html:
+    embed-resources: true
+execute:
+  cache: true
+
+---
+
+## Overview
+
+The goal of this assignment is to apply the tools and approaches we've learned during this course to critique, and then expand on, a statistical analysis. 
+
+Please submit this assignment via GitHub by 20 November.   
+
+## Read & reflect
+
+**Read the article "Seascape ecology of juvenile gadoid nursery areas" (Walker-Milne et al. 2025). Describe: \[2 pt\]**
+
+1. The primary question(s) the authors are trying to answer.
+- To identify environmental variables Such as depth, patch characteristics, distance to shore, current velocity in characterizing the juvenile habitats of gadoid species: Atlantic cod, haddock and whiting
+-To test whether these 3 species have habitat preference  and share spatial coverage
+
+2. The experimental and sampling design. 
+
+_Data collection using Video survey was used between 2013
+and 2019 in Scotland.
+- The following variables were collected: habitat;mud,alage,grave,pebble;terrain ruggedness index, distance,inverse Simpson’s diversity index,mean current velocity
+_ Data collected was classify as presence or absence 
+
+
+
+3. The statistical approach used.
+
+-Data analyses and modelling was done using Binomial in GAM
+-Colleanrity checks was performed among variables using multicollineraity diagnostic measures and spearman's rank correlation coefficient
+-Akaike information criterion for model selection and evaluation
+- Months were classify in to early or late season
+-Spatial autocolleation was also tested using Moran's statistic 
+
+
+
+**Imagine you are reviewing this manuscript prior to its publication. Provide a constructive critique of the statistical analyses as they relate to the experimental and sampling design. What did they do well? What would be improved? \[3 pt\]**
+
+- They have done well in there statistical choice. I would  say presence or absence model eliminate the species count magnitude which means 1 is equal to species counted as 100 on the same scale. They have also check for spatial autocorrelation and collinerity. 
+
+## Re-analysis
+
+The data associated with this paper are available here: https://datadryad.org/dataset/doi:10.5061/dryad.fbg79cp7n.
+
+Considering your critique of the statistical approach taken, re-analyze the data, focusing on MaxN (the maximum number of individuals present in the frame at one time during the video) as the response variable. For the purposes of this assignment, don't worry about the AUC or data splitting to test for accuracy, just use the full dataset. 
+
+**Use the code chunk below to load packages and the data. \[0.5 pt\]**
+
+```{r setup}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+library(glmmTMB)
+library(tidyverse)
+library(mgcv)
+library(performance)
+library(tidyverse)
+library(janitor)
+library(DHARMa)
+library(patchwork)
+
+dat <- read.csv("gadoid.metadata.2.csv")
+
+
+gadoid_df <- dat %>%
+  filter(Species %in% c("morhua", "aeglefinus", "merlangus")) %>%
+  select(
+    MaxN, Species, Habitat, Season, Year, Zone, patchID, Station,
+    Algae, Pebble, Gravel, Sand, Depth, tri, mean_velocity,
+    Simpson, dist, sand.dist.edge, pebble.dist.edge, mud.dist.edge) %>%
+  drop_na() %>%
+  mutate(
+    Species = factor(Species),
+    Habitat = factor(Habitat),
+    Season  = factor(Season),
+    Year    = factor(Year),
+    Zone    = factor(Zone),
+    patchID = factor(patchID),
+    Station = factor(Station))
+glimpse(gadoid_df)
+summary(gadoid_df$MaxN)
+
+
+```
+
+## Data exploration
+
+**Explore the data visually using ggplot2. \[0.5 pt\]**
+
+```{r plotting}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+
+datsum <- gadoid_df %>%
+  group_by(Habitat, Species) %>%
+  tally()
+
+
+
+
+ggplot(gadoid_df, aes(x = Habitat, y = MaxN)) +
+  geom_boxplot() +
+  geom_text(
+    data = datsum,
+    aes(x = Habitat, y = Inf, label = n),
+    vjust = 2) +
+  facet_wrap(~ Species) +
+  scale_y_continuous(limits = c(0, 105)) +
+  theme_classic()
+
+
+
+ggplot(gadoid_df, aes(x = Year, y = MaxN)) +
+  geom_boxplot() +
+  facet_wrap(~ Species) +
+  theme_classic()
+
+ggplot(gadoid_df, aes(x = Depth, y = MaxN, colour = Season)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth() +
+  facet_wrap(~ Species, scales = "free") +
+  theme_classic()
+
+
+
+```
+
+## Model development
+
+**Based on the experimental and sampling design, which variables should be considered as fixed effects? Which could be considered as random effects? What distributions should be considered? \[1 pt\]**
+**- Fixed effects:** habitat variable, seascape,species,season and year. The fixed effects are the one we want to measure ecological to see there effect on the response 
+**- Random effects:** Zone, patchID,station. These are the grouping effects that are nested or hirarchical/ structural location base within the site of interest 
+**Distributions to consider:** Because `MaxN` is non-negative integer count data (`0, 1, 2...`) with many zeros and occasional large schooling counts (overdispersion), a **Negative Binomial (`nb()`)** distribution is the primary choice, alongside **Tweedie (`tw()`)** or **Zero-Inflated Poisson (`ziP()`)** to handle excess zeros and overdispersion (whereas a standard Poisson would likely suffer from overdispersion). I will fit generalized additive mixed models using a Negative Binomial distribution (family = nb() in mgcv::gam()),
+
+## Analysis
+
+**Develop a set of generalized additive mixed-effects models that reflect the structures described above. \[1 pt\]**
+
+```{r models}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+
+m0 <- gam(
+  MaxN ~ Species + Season + Year +
+    Algae + Gravel + Sand + Depth + tri + mean_velocity +
+    Simpson + dist + sand.dist.edge + mud.dist.edge,
+  data = gadoid_df,
+  family = nb(),
+  method = "REML")
+
+m1 <- gam(
+  MaxN ~ Species + Season + Year +
+    Algae + Gravel + Sand + Depth + tri + mean_velocity +
+    Simpson + dist + sand.dist.edge + mud.dist.edge +
+    Zone + patchID + Station, data = gadoid_df,
+  family = nb(), method = "REML")
+
+
+m2<- gam(
+  MaxN ~ Species + Season + Year +
+    Algae + Gravel + Sand + Depth + tri + mean_velocity +
+    Simpson + dist + sand.dist.edge + mud.dist.edge +
+    s(Zone, bs = "re") +
+    s(patchID, bs = "re") +
+    s(Station, bs = "re"),
+  data = gadoid_df,
+  family = nb(), method = "REML")
+
+m3 <- gam(
+  MaxN ~ Species + Season + Year +
+    s(Algae, by = Species, k = 5) +
+    s(Gravel, by = Species, k = 5) +
+    s(Sand, by = Species, k = 5) +
+    s(Depth, by = Species, k = 5) +
+    s(tri, by = Species, k = 5) +
+    s(mean_velocity, by = Species, k = 5) +
+    s(Simpson, by = Species, k = 5) +
+    s(dist, by = Species, k = 5) +
+    s(sand.dist.edge, by = Species, k = 5) +
+    s(mud.dist.edge, by = Species, k = 5) +
+    s(Zone, bs = "re") +
+    s(patchID, bs = "re") +
+    s(Station, bs = "re"),
+  data = gadoid_df,
+  family = nb(),
+  method = "REML")
+
+m4 <- gam(
+  MaxN ~ Species + Season + Year +
+    s(Algae, by = Species, k = 10) +
+    s(Gravel, by = Species, k = 10) +
+    s(Sand, by = Species, k = 10) +
+    s(Depth, by = Species, k = 10) +
+    s(tri, by = Species, k = 10) +
+    s(mean_velocity, by = Species, k = 10) +
+    s(Simpson, by = Species, k = 10) +
+    s(dist, by = Species, k = 10) +
+    s(sand.dist.edge, by = Species, k = 10) +
+    s(mud.dist.edge, by = Species, k = 10) +
+    s(Zone, bs = "re") +
+    s(patchID, bs = "re") +
+    s(Station, bs = "re"),
+  data = gadoid_df,
+  family = nb(),
+  method = "REML")
+
+
+
+
+```
+
+
+
+**Evaluate the models using an approach covered as part of this class. \[0.5 pt\]**
+
+```{r modelselection}
+#| message: false
+#| error: false
+library(gratia)
+# Paste your code in here!
+AIC(m0, m1, m2, m3, m4) |> arrange()
+
+
+```
+
+**Check your model diagnostics (i.e., are the model assumptions met) using an approach covered as part of this class. \[1 pt\]**
+
+```{r diagnostics}
+#| message: false
+#| error: false
+
+# Paste your code in here!
+par(mfrow = c(2, 2))
+gam.check(m4)
+
+draw(m4)
+
+# 1. Generate and plot simulated residuals via DHARMa package
+
+m4_resids <- simulateResiduals(fittedModel = m4)
+plot(m4_resids)
+
+# 2. Recalculate residuals grouped by survey Year and test for temporal autocorrelation
+m4_recalresids <- recalculateResiduals(
+  m4_resids,
+  group = gadoid_df$Year)
+
+testTemporalAutocorrelation(
+  simulationOutput = m4_recalresids,
+  time = as.numeric(as.character(unique(gadoid_df$Year))))
+```
+
+**Which model would you choose as your final model? Why is that model preferred over the others? \[1 pt\]**
+I will chose my model 4. It have Lower AIC, the qqplot curves show minordeviations but overall qqplot is tracks 1:. The dispersion check(p=0.064), outliers(p=1) and there was no temporal autocorrelation(DW = 0.999, p = 0.2197). The nb for count MaxN count data captures successfully the variance structure. The Gam check shows all smoothers converged cleanly with edf less 6 and p > 0.90
+
+**Generate model predictions (using the ggeffects package) and plot the predictions over observed data. Describe your results. \[1.5 pt\]**
+
+```{r predictions}
+#| message: false
+#| error: false
+
+library(ggeffects)
+
+# Paste your code in here!
+
+
+# 1. Generate predictions 
+pred_depth <- predict_response(
+  m4,terms = c("Depth", "Species"))
+
+pred_algae <- predict_response(
+  m4,
+  terms = c("Algae", "Species"))
+
+pred_vel <- predict_response(
+  m4,terms = c("mean_velocity", "Species"))
+
+
+
+# 2. Plot predictions over observed MaxN data 
+
+obs_df <- gadoid_df %>% mutate(group = Species)
+
+p1 <- plot(pred_depth) +
+  geom_point(data = obs_df, aes(x = Depth, y = MaxN, color = group), alpha = 0.35, size = 1.6, inherit.aes = FALSE) +
+  geom_rug(data = obs_df, aes(x = Depth), inherit.aes = FALSE, alpha = 0.25) +
+  facet_wrap(~ group) +
+  coord_cartesian(ylim = c(0, 35)) +
+  labs(title = "A. Predicted MaxN across Water Depth", x = "Depth (m)", y = "MaxN") +
+  theme_classic(base_size = 12) +
+  theme(strip.background = element_blank(), strip.text = element_text(face = "bold", size = 12))
+
+p2 <- plot(pred_algae) +
+  geom_point(data = obs_df, aes(x = Algae, y = MaxN, color = group), alpha = 0.35, size = 1.6, inherit.aes = FALSE) +
+  geom_rug(data = obs_df, aes(x = Algae), inherit.aes = FALSE, alpha = 0.25) +
+  facet_wrap(~ group) +
+  coord_cartesian(ylim = c(0, 35)) +
+  labs(title = "B. Predicted MaxN across Macroalgal Cover", x = "Proportional Algae Cover", y = "MaxN") +
+  theme_classic(base_size = 12) +
+  theme(strip.background = element_blank(), strip.text = element_text(face = "bold", size = 12))
+
+p3 <- plot(pred_vel) +
+  geom_point(data = obs_df, aes(x = mean_velocity, y = MaxN, color = group), alpha = 0.35, size = 1.6, inherit.aes = FALSE) +
+  geom_rug(data = obs_df, aes(x = mean_velocity), inherit.aes = FALSE, alpha = 0.25) +
+  facet_wrap(~ group) +
+  coord_cartesian(ylim = c(0, 35)) +
+  labs(title = "C. Predicted MaxN across Mean Current Velocity", x = "Mean Velocity (m/s)", y = "MaxN") +
+  theme_classic(base_size = 12) +
+  theme(strip.background = element_blank(), strip.text = element_text(face = "bold", size = 12))
+
+(p1 / p2 / p3) + plot_layout(guides = "collect") & theme(legend.position = "none")
+
+
+
+
+
+```
+
+
+## Conclusions
+
+**How do your results compare to those presented by Walker-Milne et al. (2025)? \[1 pt\]**
+
+The authors anlayse these dataset with one by one species while I combine all species for more dataset and statistical power. I used nb while the authors used presence/abscence for Binomial model 
+**Provide summary statements about the quality of your analysis, including any potential limitations or caveats. \[1 pt\]**
+I alnaylse only four models i could domne alot more and i did check for any interactions or tensor products which could have improve the model 
+
+## AI statement
+
+*If you used AI for this assignment, please describe your use, including:*
+
+*1.  What tool or service did you use?*
+I use Gemini
+
+*2.  What was the specific purpose or use?*
+I attempted to generate the prediction( terms=c("Depth", "Mean_Velocity", "species")) but loaded for ever. So Gemini give me the otion to generate continuous and categorical for one my one 
+
+*3.  How did this use enhance your understanding of the topic/code?*
+It solve my coding problems 
